@@ -6,7 +6,7 @@ from exceptions import PyZiException
 class Enrich:
 	match_input: str
 	output_fields: List[str]
-	enrichment_class: Callable
+	api_object: Callable
 	
 	def __new__(cls, *inputs, fields: List[str] = None, exclude: List[str] = None):
 		if fields and exclude:
@@ -25,8 +25,8 @@ class Enrich:
 					fields.append(field)
 		else:
 			fields = cls.output_fields
-		if cls.enrichment_class:
-			return {cls.match_input: [cls.enrichment_class(**i) for i in inputs], 'outputFields': fields}
+		if cls.api_object:
+			return {cls.match_input: [cls.api_object(**i) for i in inputs], 'outputFields': fields}
 		else:
 			return {cls.match_input: inputs, 'outputFields': fields}
 
@@ -59,135 +59,10 @@ class ContactEnrich:
 
 
 class EnrichContacts(Enrich):
-	enrichment_class = ContactEnrich
+	api_object = ContactEnrich
 	match_input = 'matchPersonInput'
-	output_fields = [
-		'id',
-		'firstName',
-		'middleName',
-		'lastName',
-		'email',
-		'hasCanadianEmail',
-		'phone',
-		'directPhoneDoNotCall',
-		'street',
-		'city',
-		'region',
-		'metroArea',
-		'zipCode',
-		'state',
-		'country',
-		'continent',
-		'personHasMoved',
-		'withinEu',
-		'withinCalifornia',
-		'withinCanada',
-		'lastUpdatedDate',
-		'validDate',
-		'noticeProvidedDate',
-		'salutation',
-		'suffix',
-		'jobTitle',
-		'jobFunction',
-		'companyDivision',
-		'education',
-		'hashedEmails',
-		'picture',
-		'mobilePhoneDoNotCall',
-		'externalUrls',
-		'companyId',
-		'companyName',
-		'companyDescriptionList',
-		'companyPhone',
-		'companyFax',
-		'companyStreet',
-		'companyCity',
-		'companyState',
-		'companyZipCode',
-		'companyCountry',
-		'companyContinent',
-		'companyLogo',
-		'companySicCodes',
-		'companyNaicsCodes',
-		'contactAccuracyScore',
-		'companyWebsite',
-		'companyRevenue',
-		'companyRevenueNumeric',
-		'companyEmployeeCount',
-		'companyType',
-		'companyTicker',
-		'companyRanking',
-		'isDefunct',
-		'companySocialMediaUrls',
-		'companyPrimaryIndustry',
-		'companyIndustries',
-		'companyRevenueRange',
-		'companyEmployeeRange',
-		'employmentHistory',
-		'managementLevel',
-		'locationCompanyId'
-	]
 
 
 class EnrichCompanies(Enrich):
+	api_object = ContactEnrich
 	match_input = 'matchCompanyInput'
-	output_fields = [
-		'id',
-		'ticker',
-		'name',
-		'website',
-		'domainList',
-		'logo',
-		'socialMediaUrls',
-		'revenue',
-		'employeeCount',
-		'numberOfContactsInZoomInfo',
-		'phone',
-		'fax',
-		'street',
-		'city',
-		'state',
-		'zipCode',
-		'country',
-		'continent',
-		'companyStatus',
-		'companyStatusDate',
-		'descriptionList',
-		'sicCodes',
-		'naicsCodes',
-		'competitors',
-		'ultimateParentId',
-		'ultimateParentName',
-		'ultimateParentRevenue',
-		'ultimateParentEmployees',
-		'subUnitCodes',
-		'subUnitType',
-		'subUnitIndustries',
-		'primaryIndustry',
-		'industries',
-		'parentId',
-		'parentName',
-		'locationCount',
-		'locationMatch',
-		'alexaRank',
-		'metroArea',
-		'lastUpdatedDate',
-		'createdDate',
-		'certificationDate',
-		'certified',
-		'hashtags',
-		'products',
-		'techAttributes',
-		'revenueRange',
-		'employeeRange',
-		'companyFunding',
-		'recentFundingAmount',
-		'recentFundingDate',
-		'totalFundingAmount',
-		'employeeGrowth',
-		'type',
-		'foundedYear',
-		'businessModel',
-		'isDefunct',
-		'departmentBudgets'
-	]

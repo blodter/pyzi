@@ -5,7 +5,7 @@ import zi_api_auth_client
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3 import Retry
 
-from api import LookupApi, SearchAndEnrichApi, WebhookApi
+from api import ComplianceApi, EnrichApi, LookupApi, SearchApi, WebhooksApi
 from exceptions import PyZiException
 
 
@@ -14,40 +14,35 @@ class ZoomInfo:
 			self,
 			*,
 			client_id: str = None,
-			domain='zoominfo.com',
+			domain: str = 'zoominfo.com',
 			password: str = None,
 			private_key: str = None,
 			session: Any = None,
-			subdomain='api',
+			subdomain: str = 'api',
+			timeout: Union[int, float] = 60.0,
 			token: str = None,
 			username: str = None,
 	):
-		self.username = username
-		self.password = password
 		self.client_id = client_id
+		self.password = password
 		self.private_key = private_key
 		self.token = token
-		self.session = self._init_session(session)
 		self.url = f'https://{subdomain}.{domain}'
+		self.username = username
+		
+		self.session = self._init_session(session)
+		
 		config = dict(
 			session=self.session,
+			timeout=timeout,
 			url=self.url,
 		)
-		# TODO: Some of these endpoints are a work in progress
-		self.company = SearchAndEnrichApi(config_name='company', **config)
-		self.company_location = ...
-		self.company_master_data = ...
-		self.contact = SearchAndEnrichApi(config_name='contact', **config)
-		self.corporatehierarchy = ...
-		self.hashtag = ...
-		self.intent = SearchAndEnrichApi(config_name='intent', **config)
-		self.ip = ...
+		
+		self.compliance = ComplianceApi(**config)
+		self.enrich = EnrichApi(**config)
 		self.lookup = LookupApi(**config)
-		self.news = SearchAndEnrichApi(config_name='news', **config)
-		self.orgchart = ...
-		self.scoop = SearchAndEnrichApi(config_name='scoop', **config)
-		self.tech = ...
-		self.webhooks = WebhookApi(**config)
+		self.search = SearchApi(**config)
+		self.webhooks = WebhooksApi(**config)
 	
 	def _get_auth_token(self) -> str:
 		if self.username and self.password:
