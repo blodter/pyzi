@@ -33,5 +33,8 @@ ERRORS = {
 	500: {
 		'An unexpected error has occurred. Please try again and if this continues to occur, please contact us and reference the error id provided above': 'The request could be too large in scope, too long to return, or experiencing a system or network issue. Contact support.',
 		'Search failed. Please try again and if this continues to occur, please contact us and reference the error id provided above': 'The request could be too large in scope, too long to return, or experiencing a system or network issue. Contact support.',
+	},
+	'Non-code': {
+		'You do not have access to this endpoint.': 'Request access for this endpoint from ZoomInfo to utilize it.'
 	}
 }

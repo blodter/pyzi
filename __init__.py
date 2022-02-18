@@ -9,7 +9,7 @@ from api import ComplianceApi, EnrichApi, LookupApi, SearchApi, WebhooksApi
 from exceptions import PyZiException
 
 
-class ZoomInfo:
+class PyZI:
 	def __init__(
 			self,
 			*,

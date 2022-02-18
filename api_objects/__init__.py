@@ -1,4 +1,4 @@
-from api_objects.base import ApiObject, EnrichObject
+from api_objects.base import ApiObject, EnrichObject, Subclass
 from api_objects.company import *
 from api_objects.contact import *
 from api_objects.results import *
@@ -45,9 +45,19 @@ class InputField(ApiObject):
 	description = None
 	fieldName = None
 	fieldType = None
+	
+	
+class Topic(ApiObject):
+	Category = None
+	Department = None
+	Description = None
+	JobFunction = None
+	Name = None
 
 
 class Intent(ApiObject):
+	_subclasses = [Subclass('topics')]
+	
 	audienceStrength = None
 	category = None
 	companyHasOtherTopicConsumption = None
@@ -62,6 +72,8 @@ class Intent(ApiObject):
 
 
 class News(ApiObject):
+	_subclasses = [Subclass('categories'), Subclass('company', SearchedCompany)]
+	
 	categories = None
 	companyId = None
 	companyName = None
@@ -75,9 +87,21 @@ class News(ApiObject):
 class OutputField(ApiObject):
 	description = None
 	fieldName = None
+	
 
-
+class Type(ApiObject):
+	id = None
+	type = None
+	
+	
 class Scoop(ApiObject):
+	_subclasses = [
+		Subclass('company', SearchedCompany),
+		Subclass('contacts', SearchedContact),
+		Subclass('topics', Topic),
+		Subclass('types', Type)
+	]
+	
 	companyId = None
 	companyName = None
 	contacts = None

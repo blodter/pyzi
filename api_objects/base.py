@@ -7,10 +7,18 @@ from objects import ClsDictAttrsObject
 
 
 class Subclass:
-	def __init__(self, param: str, obj: Callable):
+	def __init__(self, param: str, obj: Callable = None):
 		self.param = param
 		self.obj = obj
-
+		
+	def map(self, param):
+		if self.obj:
+			if isinstance(param, dict):
+				return self.obj(**param)
+			else:
+				return self.obj(param)
+		else:
+			return param
 
 class QueryObject:
 	def __init__(self, **kwargs):
@@ -25,13 +33,19 @@ class ApiObject:
 	def __init__(self, **kwargs):
 		self.id = None
 		self.__dict__ = kwargs
-		for cls in self._subclasses:
-			setattr(self, cls.param, cls.obj(**kwargs.pop(cls.param)))
+		for subclass in self._subclasses:
+			param = kwargs.pop(subclass.param, None)
+			if not param:
+				continue
+			if not isinstance(param, list):
+				setattr(self, subclass.param, subclass.map(param))
+			else:
+				setattr(self, subclass.param, [subclass.map(i) for i in param])
 		for key, val in kwargs.items():
 			if key in self._datetime_fields:
 				val = self._parse_datetime(val)
 			setattr(self, key, val)
-	
+			
 	@staticmethod
 	def _parse_datetime(datetime_: str):
 		if datetime_ and datetime_ != '':

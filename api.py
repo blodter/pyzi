@@ -66,6 +66,8 @@ class BaseApi:
 			try:
 				response_json = response.json()
 				error_code = response_json.get('responseCode', None)
+				if not error_code:
+					error_code = 'Non-code'
 				error_message = response_json.get('message', None)
 				code_errors = ERRORS.get(error_code, None)
 				if not code_errors:
@@ -126,8 +128,7 @@ class EnrichApi(BaseApi):
 class LookupApi(BaseApi):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		lookup_configs = EndpointConfigs('lookup')
-		self._set_endpoints(*args, configs=lookup_configs.items(), **kwargs)
+		self._set_endpoints(*args, configs=EndpointConfigs('lookup').items(), **kwargs)
 	
 	def _set_endpoints(self, *args, configs, **kwargs):
 		for name, config in configs:

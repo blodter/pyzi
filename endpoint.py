@@ -2,7 +2,7 @@ from typing import Union
 
 from api_objects import *
 from mapping import *
-from objects import DictAttrsObject
+from objects import ClsDictAttrsObject, DictAttrsObject
 
 
 class Endpoint:
@@ -160,7 +160,7 @@ class DummyEndpointConfig(DictAttrsObject):
 		return self.dict().items()
 
 
-class EnrichEndpointConfigs(DictAttrsObject):
+class EnrichEndpointConfigs:
 	company = EnrichEndpointConfig('company', EnrichedCompany)
 	company_location = EnrichEndpointConfig('location', EnrichedCompanyLocation)
 	company_master_data = EnrichEndpointConfig('company-master', EnrichedCompanyMasterData)
@@ -175,7 +175,7 @@ class EnrichEndpointConfigs(DictAttrsObject):
 	tech = SearchEndpointConfig('tech', ApiObject)
 
 
-class LookupEndpointConfigs(DictAttrsObject):
+class LookupEndpointConfigs(ClsDictAttrsObject):
 	board_member = LookupEndpointConfig('boardMember')
 	company_ranking = LookupEndpointConfig('companyranking')
 	company_type = LookupEndpointConfig('companytype')
@@ -211,7 +211,7 @@ class LookupEndpointConfigs(DictAttrsObject):
 	usage = LookupEndpointConfig('usage')
 
 
-class SearchEndpointConfigs(DictAttrsObject):
+class SearchEndpointConfigs:
 	company = SearchEndpointConfig('company', SearchedCompany)
 	contact = SearchEndpointConfig('contact', SearchedContact)
 	intent = SearchEndpointConfig('intent', Intent)
@@ -219,7 +219,7 @@ class SearchEndpointConfigs(DictAttrsObject):
 	scoop = SearchEndpointConfig('scoop', Scoop)
 
 
-class WebhookEndpointConfigs(DictAttrsObject):
+class WebhookEndpointConfigs:
 	create = ...
 	update = ...
 	delete = ...
@@ -228,7 +228,7 @@ class WebhookEndpointConfigs(DictAttrsObject):
 	subscription_types = ...
 
 
-class EndpointConfigs(DictAttrsObject):
+class EndpointConfigs:
 	compliance = EnrichEndpointConfig('compliance', Compliance, endpoint='compliance')
 	enrich = EnrichEndpointConfigs()
 	lookup = LookupEndpointConfigs()
